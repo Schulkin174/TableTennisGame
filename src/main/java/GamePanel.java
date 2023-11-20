@@ -3,13 +3,17 @@ import java.awt.event.*;
 import java.util.*;
 import javax.swing.*;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
 public class GamePanel extends JPanel implements Runnable{
 
     static final int GAME_WIDTH = 1000;
     static final int GAME_HEIGHT = (int)(GAME_WIDTH * (0.5555)); // можно написать проще, данная логика исходя из размеров реальных столов для наст.тенниса
     static final Dimension SCREEN_SIZE = new Dimension(GAME_WIDTH, GAME_HEIGHT); // SCREEN_SIZE устанавливаем равным новому объекту Dimension с шириной, равной GAME_WIDTH, и высотой, равной GAME_HEIGHT
     static final int BALL_DIAMETER = 20;
-    static final int PADDLE_WIDTH = 25;
+    static final int PADDLE_WIDTH = 90; // при установке g.setColor, оптимальный размер 25, см. метод draw класса paddle
     static final int PADDLE_HEIGHT = 100;
     Thread gameThread;
     Image image;
@@ -36,8 +40,8 @@ public class GamePanel extends JPanel implements Runnable{
         ball = new Ball((GAME_WIDTH/2)-(BALL_DIAMETER/2), random.nextInt(GAME_HEIGHT - BALL_DIAMETER), BALL_DIAMETER, BALL_DIAMETER); // добавил появление мяча из рандомного места доски относительно центра
     }
     public void newPaddles(){
-        paddle1 = new Paddle(0, (GAME_HEIGHT/2)-(PADDLE_HEIGHT/2), PADDLE_WIDTH, PADDLE_HEIGHT, 1); // чтобы разобраться что здесь происходит, см. параметры класса "Paddle"
-        paddle2 = new Paddle(GAME_WIDTH-PADDLE_WIDTH, (GAME_HEIGHT/2)-(PADDLE_HEIGHT/2), PADDLE_WIDTH, PADDLE_HEIGHT, 2);
+        paddle1 = new Paddle(0, (GAME_HEIGHT/2)-(PADDLE_HEIGHT/2), PADDLE_WIDTH, PADDLE_HEIGHT, 1, "src/images/table-tennis-racket.png"); // чтобы разобраться что здесь происходит, см. параметры класса "Paddle"
+        paddle2 = new Paddle(GAME_WIDTH-PADDLE_WIDTH, (GAME_HEIGHT/2)-(PADDLE_HEIGHT/2), PADDLE_WIDTH, PADDLE_HEIGHT, 2, "src/images/table-tennis-racket.png");
 
     }
     public void paint(Graphics g){
@@ -99,10 +103,10 @@ public class GamePanel extends JPanel implements Runnable{
         }
         // настраиваю систему начисления баллов, очков (счет, он же score)
         if (ball.x <= 0){
-          score.player2++;
-          newPaddles();
-          newBall();
-          System.out.println("Игрок 2:"+score.player2);
+            score.player2++;
+            newPaddles();
+            newBall();
+            System.out.println("Игрок 2:"+score.player2);
         }
         if (ball.x >= GAME_WIDTH - BALL_DIAMETER){
             score.player1++;
@@ -128,7 +132,7 @@ public class GamePanel extends JPanel implements Runnable{
                 repaint();
                 delta--; // и после вызова мув, чекколижн, репэйнт - уменьшаю дельту на -1.
                 // Вышеописанный механизм позволяет игровому циклу обновлять игровой мир с заданной частотой, что полезно для поддержания стабильной скорости и плавности в играх.
-            //    System.out.println("TEST"); // цикл сложный, поэтому провожу тест работы цикла: в рабочем режиме проверка не нужна.
+                //    System.out.println("TEST"); // цикл сложный, поэтому провожу тест работы цикла: в рабочем режиме проверка не нужна.
             }
         }
     }

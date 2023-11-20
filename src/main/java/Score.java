@@ -3,6 +3,10 @@ import java.awt.event.*;
 import java.util.*;
 import javax.swing.*;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
 public class Score extends Rectangle{
 
     static int GAME_WIDTH;
